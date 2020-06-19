@@ -141,7 +141,7 @@ class PathFinder(object):
         Build the dictionary mapping doc_id to path.  doc_id is based on
         the filename.
         """
-        return dict(zip(self.doc_id, self.paths))
+        return dict(list(zip(self.doc_id, self.paths)))
 
     def __getitem__(self, identifiers):
         """

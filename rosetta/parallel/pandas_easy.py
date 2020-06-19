@@ -76,7 +76,7 @@ def groupby_to_scalar_to_series(df_or_series, func, n_jobs, **groupby_kwargs):
     apply_func = partial(_get_label_values, func, False)
 
     labels_values = map_easy(apply_func, grouped, n_jobs)
-    labels, values = zip(*labels_values)
+    labels, values = list(zip(*labels_values))
 
     return pd.Series(values, index=labels)
 
@@ -133,7 +133,7 @@ def groupby_to_series_to_frame(
     # For every group, get the label (group name) and the values
     # (output of apply_func)
     labels_values = map_easy(apply_func, grouped, n_jobs)
-    labels, values = zip(*labels_values)
+    labels, values = list(zip(*labels_values))
 
     # Since each value is a series, concat along axis 1 to make a short
     # and fat frame, then take transpose
@@ -142,7 +142,7 @@ def groupby_to_series_to_frame(
     # Set the index
     if hasattr(groupby_kwargs['by'], 'name'):
         indexname = groupby_kwargs['by'].name
-    elif isinstance(groupby_kwargs['by'], basestring):
+    elif isinstance(groupby_kwargs['by'], str):
         indexname = groupby_kwargs['by']
     else:
         indexname = None

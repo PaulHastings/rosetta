@@ -11,18 +11,17 @@ except ImportError:
     HAS_MYSQLDB = False
 
 
-from streamers import BaseStreamer
+from .streamers import BaseStreamer
 import pymongo
 
 from .. import common
 from rosetta.text import text_processors
 
 
-class DBStreamer(BaseStreamer):
+class DBStreamer(BaseStreamer, metaclass=abc.ABCMeta):
     """
     Database streamer base class
     """
-    __metaclass__ = abc.ABCMeta
 
     def __init__(
             self, db_setup, tokenizer=None, tokenizer_func=None):
@@ -240,6 +239,6 @@ class MongoStreamer(DBStreamer):
                                            specified text field")
             result['text'] = result[_text_key]
             if _translate:
-                for k, v in _translate.items():
+                for k, v in list(_translate.items()):
                     result[v] = result[k]
             yield result

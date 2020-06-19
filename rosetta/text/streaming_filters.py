@@ -109,7 +109,7 @@ def get_tf_idf_filter(sfile_filter, min_tf_idf):
     idf = sfile_filter.idf
     def tf_idf_filter(record_dict):
         feature_values = record_dict['feature_values']
-        tokens = feature_values.keys()
+        tokens = list(feature_values.keys())
         for token in tokens:
             if idf[token] * feature_values[token] < min_tf_idf:
                 del feature_values[token]
@@ -166,7 +166,7 @@ def get_token_to_id_filter(sfile_filter):
         record_dict['feature_values'] = {
             token2id[token]: value
             for token, value
-            in record_dict['feature_values'].iteritems()
+            in record_dict['feature_values'].items()
             if token in token2id}
         keep_doc = True
         return keep_doc

@@ -145,7 +145,7 @@ class SmartStore(object):
         reductions : String or list of strings
             Reductions to use.  Determines data stored to some extent.
         """
-        if isinstance(reductions, basestring):
+        if isinstance(reductions, str):
             reductions = [reductions]
 
         self.reductions = reductions
@@ -176,7 +176,7 @@ class SmartStore(object):
         """
         Returns iterator over results.
         """
-        for k in self.counts.iterkeys():
+        for k in self.counts.keys():
             row = {'key': k}
 
             if 'count' in self.reductions:

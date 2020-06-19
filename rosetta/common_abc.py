@@ -3,7 +3,7 @@ Common abstract base classes (or mixins..if we get krazy) that will be shared
 across modules.
 """
 try:
-    import cPickle
+    import pickle
 except ImportError:
     import pickle as cPickle
 
@@ -30,7 +30,7 @@ class SaveLoad(object):
             0 < 1 < 2 in terms of performance.  -1 means use highest available.
         """
         with smart_open(savefile, 'w') as f:
-            cPickle.dump(self, f, protocol=protocol)
+            pickle.dump(self, f, protocol=protocol)
 
     @classmethod
     def load(cls, loadfile):
@@ -42,4 +42,4 @@ class SaveLoad(object):
         loadfile : filepath or buffer
         """
         with smart_open(loadfile, 'rb') as f:
-            return cPickle.load(f)
+            return pickle.load(f)

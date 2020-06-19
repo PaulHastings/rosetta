@@ -4,7 +4,7 @@ tests for common, common_abc, etc...
 import os
 import sys
 import unittest
-from StringIO import StringIO
+from io import StringIO
 from numpy.testing import assert_allclose
 from collections import defaultdict
 

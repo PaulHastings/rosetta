@@ -1,5 +1,5 @@
 import unittest
-from StringIO import StringIO
+from io import StringIO
 from numpy.testing import assert_allclose
 
 from rosetta.cmdutils import concat_csv, join_csv, subsample, cut, row_filter, \

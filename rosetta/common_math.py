@@ -66,7 +66,7 @@ def subsample_arr(arr, N=None, frac_keep=None):
         N = int(len(arr) * frac_keep)
 
     if isinstance(arr, np.ndarray):
-        index = choice(range(len(arr)), size=N, replace=False)
+        index = choice(list(range(len(arr))), size=N, replace=False)
         return arr[np.ix_(index)]
     elif isinstance(arr, pd.Series) or isinstance(arr, pd.DataFrame):
         index = choice(arr.index, size=N, replace=False)

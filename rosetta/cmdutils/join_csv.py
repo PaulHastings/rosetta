@@ -98,7 +98,7 @@ def _join(outfile, files, sep, index, how, null_fill, parse_dates):
             "index must be length 1 or len(files)"
 
     # Load and join frames
-    loop_vars = zip(files, index, how)
+    loop_vars = list(zip(files, index, how))
     for i, (files_i, index_i, how_i) in enumerate(loop_vars):
         newframe = pd.DataFrame.from_csv(
             files_i, sep=sep, index_col=index_i, parse_dates=parse_dates)

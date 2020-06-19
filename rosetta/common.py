@@ -1,14 +1,14 @@
 """
 Common functions/classes for dataprep.
 """
-from __future__ import division, print_function, unicode_literals
+
 import numpy as np
 try:
-    import cPickle
+    import pickle
 except ImportError:
     import pickle as cPickle
 try:
-    from itertools import izip_longest
+    from itertools import zip_longest
 except ImportError:
     from itertools import zip_longest as izip_longest
 import functools
@@ -55,7 +55,7 @@ class smart_open(object):
             First arg will be 'mode', e.g. 'r', 'rb', 'w'
             Second arg will be 'buffering', read the docs for open
         """
-        if isinstance(filename, basestring):
+        if isinstance(filename, str):
             self.fh = open(filename, *args)
             self.closing = True
         else:
@@ -130,7 +130,7 @@ def pickleme(obj, pkl_file, protocol=2):
         2 is fastest
     """
     with smart_open(pkl_file, 'w') as f:
-        cPickle.dump(obj, f, protocol=protocol)
+        pickle.dump(obj, f, protocol=protocol)
 
 
 def unpickleme(pkl_file):
@@ -143,7 +143,7 @@ def unpickleme(pkl_file):
         We will attempt to unpickle this file.
     """
     with smart_open(pkl_file, 'r') as f:
-        return cPickle.load(f)
+        return pickle.load(f)
 
 
 def get_structured_array(listoflists, schema, dropmissing=False):
@@ -208,7 +208,7 @@ class DocIDError(Exception):
 
 def printdict(d, max_print_len=None):
     s = ''
-    for key, value in d.iteritems():
+    for key, value in d.items():
         s += str(key) + ': ' + str(value) + '\n'
     if max_print_len:
         print(s[:max_print_len])
@@ -261,7 +261,7 @@ def nested_keysearch(ndict, key_list):
         E.g. {'a': {'b': 2}}
     key_list : List of strings
     """
-    if isinstance(key_list, basestring):
+    if isinstance(key_list, str):
         key_list = [key_list]
 
     first_key = key_list[0]
@@ -298,7 +298,7 @@ def grouper(iterable, chunksize, fillvalue=None):
     """
     args = [iter(iterable)] * chunksize
 
-    return izip_longest(fillvalue=fillvalue, *args)
+    return zip_longest(fillvalue=fillvalue, *args)
 
 
 def compose(*functions):

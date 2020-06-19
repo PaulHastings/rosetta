@@ -1,7 +1,7 @@
 import re
 
 try:
-    from itertools import izip, chain
+    from itertools import chain
 except ImportError:
     from itertools import chain
     izip = zip
@@ -83,9 +83,9 @@ def bigram_tokenize_iter(
     """
     text_frags = re.split(skip_regex, text)
     word_lists = [word_tok(frag, **word_tok_kwargs) for frag in text_frags]
-    bigram_iter = izip(word_lists[0], word_lists[0][1:])
+    bigram_iter = zip(word_lists[0], word_lists[0][1:])
     for words in word_lists[1:]:
-        bigram_iter = chain(bigram_iter, izip(words, words[1:]))
+        bigram_iter = chain(bigram_iter, zip(words, words[1:]))
     return bigram_iter
 
 

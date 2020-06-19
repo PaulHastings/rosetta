@@ -17,11 +17,10 @@ from ..common import lazyprop, smart_open, DocIDError
 from . import filefilter, text_processors
 
 
-class BaseStreamer(object):
+class BaseStreamer(object, metaclass=abc.ABCMeta):
     """
     Base class...don't use this directly.
     """
-    __metaclass__ = abc.ABCMeta
 
     @abc.abstractmethod
     def info_stream(self, **kwargs):
@@ -137,7 +136,7 @@ class BaseStreamer(object):
         # sparse matrix row by row.
         for row, tokens in enumerate(self.token_stream(cache_list, **kwargs)):
             doc_counts = Counter(tokens)
-            for token, count in doc_counts.items():
+            for token, count in list(doc_counts.items()):
                 if token not in token_col:
                     n_col += 1
                     token_col[token] = n_col
@@ -191,7 +190,7 @@ class VWStreamer(BaseStreamer):
 
         # Set self.records and self.doc_id
         self.records = records
-        doc_id = records.keys()
+        doc_id = list(records.keys())
         if self.shuffle:
             shuffle(doc_id)
         self.doc_id = doc_id
@@ -342,7 +341,7 @@ class TextFileStreamer(BaseStreamer):
         Build the dictionary mapping doc_id to path.  doc_id is based on
         the filename.
         """
-        return dict(zip(self.doc_id, self.paths))
+        return dict(list(zip(self.doc_id, self.paths)))
 
     @lazyprop
     def file_stat(self):

@@ -40,7 +40,7 @@ class LockIterateApply(threading.Thread):
         """
         try:
             self.lock.acquire()
-            x = self.myiter.next()
+            x = next(self.myiter)
             self.lock.release()
         except StopIteration:
             self.lock.release()

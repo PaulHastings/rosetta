@@ -105,7 +105,7 @@ def parse_lda_topics(topics_file, num_topics, max_token_hash=None,
 def _parse_lda_topics_iter(topics_file, num_topics, max_token_hash,
                            normalize):
     fmt = 'topic_%0' + str(len(str(num_topics))) + 'd'
-    fmt_array = [fmt % i for i in xrange(num_topics)]
+    fmt_array = [fmt % i for i in range(num_topics)]
     # The topics file contains a bunch of informational printout stuff at
     # the top.  Figure out what line this ends on
     with smart_open(topics_file, 'r') as open_file:
@@ -126,7 +126,7 @@ def _parse_lda_topics_iter(topics_file, num_topics, max_token_hash,
                 assert topic_len == num_topics
                 if normalize:
                     topic_weights = topic_weights/topic_weights.sum()
-                topic_dict = dict(zip(fmt_array, topic_weights))
+                topic_dict = dict(list(zip(fmt_array, topic_weights)))
                 topic_dict.update({'hash_val': hash_val})
                 in_valid_rows = True
                 yield topic_dict
@@ -206,7 +206,7 @@ def parse_lda_predictions(predictions_file, num_topics, start_line,
 def _parse_lda_predictions_iter(predictions_file, num_topics, start_line,
                                 normalize):
     fmt = 'topic_%0' + str(len(str(num_topics))) + 'd'
-    fmt_array = [fmt % i for i in xrange(num_topics)]
+    fmt_array = [fmt % i for i in range(num_topics)]
     # Use this rather than pandas.read_csv due to inconsistent use of sep
     with smart_open(predictions_file) as open_file:
         # We may have already opened and read this file in order to
@@ -221,7 +221,7 @@ def _parse_lda_predictions_iter(predictions_file, num_topics, start_line,
             assert topic_len == num_topics
             if normalize:
                 topic_weights = topic_weights/topic_weights.sum()
-            topic_dict = dict(zip(fmt_array, topic_weights))
+            topic_dict = dict(list(zip(fmt_array, topic_weights)))
             topic_dict.update({'doc_id': split_line[-1]})
             yield topic_dict
 
@@ -268,7 +268,7 @@ class LDAResults(object):
         topics = parse_lda_topics(topics_file, num_topics,
                                   max(sfile_filter.id2token.keys()),
                                   normalize=False)
-        topics = topics.reindex(index=sfile_filter.id2token.keys())
+        topics = topics.reindex(index=list(sfile_filter.id2token.keys()))
         topics = topics.rename(index=sfile_filter.id2token)
 
         # Load the predictions
@@ -441,13 +441,13 @@ class LDAResults(object):
         """
         df = df.copy()
 
-        if isinstance(rows, basestring):
+        if isinstance(rows, str):
             rows = [rows]
-        if isinstance(cols, basestring):
+        if isinstance(cols, str):
             cols = [cols]
-        if isinstance(c_rows, basestring):
+        if isinstance(c_rows, str):
             c_rows = [c_rows]
-        if isinstance(c_cols, basestring):
+        if isinstance(c_cols, str):
             c_cols = [c_cols]
 
         # Restrict using the conditionals
@@ -521,7 +521,7 @@ class LDAResults(object):
         Elogtheta = pd.Series(
             self._dirichlet_expectation(gamma), index=self.topics)
         expElogtheta = np.exp(Elogtheta)
-        expElogbeta = self._expElogbeta.loc[counts.keys()]
+        expElogbeta = self._expElogbeta.loc[list(counts.keys())]
 
         # The optimal phi_{dwk} (as a function of k) is proportional to
         # expElogtheta_k * expElogbeta_w.

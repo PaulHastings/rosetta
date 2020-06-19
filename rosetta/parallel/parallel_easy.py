@@ -11,7 +11,7 @@ import itertools
 from multiprocessing import cpu_count, Pool, Process, Manager, Lock
 from multiprocessing.pool import IMapUnorderedIterator, IMapIterator
 try:
-    import cPickle
+    import pickle
 except ImportError:
     import pickle as cPickle
 import sys
@@ -86,7 +86,7 @@ def _parallel_apply(func, iterable, n_jobs, sep='\n', out_stream=sys.stdout):
 
     # start pool workers
     pool = []
-    for i in xrange(n_jobs):
+    for i in range(n_jobs):
         p = Process(target=_do_work_off_queue,
                     args=(lock, in_q, func, out_q, sep))
         p.start()
@@ -130,7 +130,7 @@ def _parallel_apply_pathos(func, iterable, n_jobs, sep='\n',
 
     # start pool workers
     pool = []
-    for i in xrange(n_jobs):
+    for i in range(n_jobs):
         p = pProcess(target=_do_work_off_queue,
                      args=(lock, in_q, func, out_q, sep))
         p.start()
@@ -208,7 +208,7 @@ def _imap_easy(func, iterable, n_jobs, chunksize, ordered=True):
     n_jobs = _n_jobs_wrap(n_jobs)
 
     if n_jobs == 1:
-        results_iter = itertools.imap(func, iterable)
+        results_iter = map(func, iterable)
     else:
         _trypickle(func)
         pool = Pool(n_jobs)
@@ -225,7 +225,7 @@ def _imap_easy_pathos(func, iterable, n_jobs, chunksize, ordered=True):
     n_jobs = _n_jobs_wrap(n_jobs)
     from multiprocess import Pool as pPool
     if n_jobs == 1:
-        results_iter = itertools.imap(func, iterable)
+        results_iter = map(func, iterable)
     else:
         pool = pPool(n_jobs)
         if ordered:
@@ -277,7 +277,7 @@ def _map_easy(func, iterable, n_jobs):
     n_jobs = _n_jobs_wrap(n_jobs)
 
     if n_jobs == 1:
-        return map(func, iterable)
+        return list(map(func, iterable))
     else:
         _trypickle(func)
         pool = Pool(n_jobs)
@@ -289,7 +289,7 @@ def _map_easy_pathos(func, iterable, n_jobs):
     n_jobs = _n_jobs_wrap(n_jobs)
 
     if n_jobs == 1:
-        return map(func, iterable)
+        return list(map(func, iterable))
     else:
         pool = pPool(n_jobs)
         return pool.map_async(func, iterable).get(GOOGLE)
@@ -498,7 +498,7 @@ def _trypickle(func):
     """
 
     try:
-        cPickle.dumps(func)
+        pickle.dumps(func)
     except TypeError as e:
         if 'instancemethod' in e.message:
             sys.stderr.write(boundmethodmsg + "\n")

@@ -102,7 +102,7 @@ def split(
     monkeys = Monkeys(base_name, ratio)
 
     ## Extract, modify, and write the header
-    header = reader.next()
+    header = next(reader)
     # If we're using a file to select variables, then replace header
     monkeys.writerow_all(header)
 
@@ -141,7 +141,7 @@ class Monkeys(object):
 
         self.monkey_list = []
         self.file_list = []
-        for m in xrange(len(self.split_nums)):
+        for m in range(len(self.split_nums)):
             file_name = base_name_nocsv + '_split-' + str(m) + '-' \
                 + split_ints[m] +'.csv'
             f = open(file_name, 'w')

@@ -53,7 +53,7 @@ def file_to_txt(file_path, dst_dir, new_file_name=None, ret_fname=False,
     if new_file_name:
         file_name = new_file_name
     converter_func_name = '_%s_to_txt' % ext
-    if converter_func_name in globals().keys():
+    if converter_func_name in list(globals().keys()):
         # calls one of the _to_txt()
         out = eval(converter_func_name)(file_path, dst_dir, file_name)
         if out:
